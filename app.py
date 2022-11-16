@@ -546,7 +546,7 @@ def show_id(ric_s,topon,reg,anno_scav,soprin,arch,
 
         # Add invisible scatter trace.
         # This trace is added to help the autoresize logic work.
-        '''fig.add_trace(
+        fig.add_trace(
             go.Scatter(
                 x=[0, img_width * scale_factor],
                 y=[0, img_height * scale_factor],
@@ -566,15 +566,15 @@ def show_id(ric_s,topon,reg,anno_scav,soprin,arch,
             range=[0, img_height * scale_factor],
             # the scaleanchor attribute ensures that the aspect ratio stays constant
             scaleanchor="x"
-        )'''
+        )
 
         # Add image
         fig.add_layout_image(
             dict(
                 x=0,
-                #sizex=img_width * scale_factor,
+                sizex=img_width * scale_factor,
                 y=img_height * scale_factor,
-                #sizey=img_height * scale_factor,
+                sizey=img_height * scale_factor,
                 xref="x",
                 yref="y",
                 opacity=1.0,
