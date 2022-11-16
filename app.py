@@ -106,10 +106,7 @@ app.layout = html.Div(children = [
         html.Span(id='23',children='Nazione 2: ',style={'display':'none'}),
         dcc.Dropdown(id='nazione2_coll', options=[{'label': i, 'value': i} for i in collezionista['Nazione 2'].unique() if i!='Missing Value'],style=dropdown_style),
         html.Hr(style={'borderColor':'#d21f1b'}),
-        html.H5('Abbreviazioni:'),
-        dcc.Dropdown(id='scegli_abbr', options=[{'label': i, 'value': i} for i in ['Abbreviazioni Archivi','Abbreviazioni Bibliografiche','Abbreviazioni Tipologie']]),
         html.Br(),
-        
     ],style={'width':'30%','float':'left'}),
     html.Div(children=[
         html.H5('Risultati della ricerca:'),
@@ -127,15 +124,19 @@ app.layout = html.Div(children = [
     ],style={'width':'65%','float':'right'}),
     html.Div(children=[
         html.Div(children=[
+            html.H5('Abbreviazioni:',style={'text':'center'}),
+            dcc.Dropdown(id='scegli_abbr', options=[{'label': i, 'value': i} for i in ['Abbreviazioni Archivi','Abbreviazioni Bibliografiche','Abbreviazioni Tipologie']]),
+            html.Br(),
             dcc.Dropdown(id='archivi', options=[{'label': i, 'value': i} for i in abbr_archivi.Abbreviazione.unique()],style=dropdown_style),
             dcc.Dropdown(id='biblio', options=[{'label': i, 'value': i} for i in abbr_biblio.Abbreviazione.unique()],style=dropdown_style),
             dcc.Dropdown(id='tipologie', options=[{'label': i, 'value': i} for i in abbr_tipologie.Abbreviazione.unique()],style=dropdown_style),
         ],style={'float':'right','width':'30%'}),
         html.Div(children=[
+            html.H5('Risultato abbreviazione:'),
             html.Span(id='abbr_archivi',style={'display':'none'}),
             html.Span(id='abbr_biblio',style={'display':'none'}),
             html.Span(id='abbr_tipologie',style={'display':'none'}),
-        ],style={'float':'left','width':'60%'}),
+        ],style={'float':'left','width':'60%','margin-left':'3%'}),
         
     ],style={'display':'flex','width':'100%'}),
     html.Div(children=[html.P(children=['*Dati aggiornati al 31/12/2022'],style={'background-color':'#cdcdcd','margin':'2%','padding':'0.5%'})])
