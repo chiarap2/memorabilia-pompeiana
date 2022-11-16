@@ -540,13 +540,13 @@ def show_id(ric_s,topon,reg,anno_scav,soprin,arch,
         fig = go.Figure()
 
         # Constants
-        img_width = 300
-        img_height = 600
+        img_width = 500
+        img_height = 500
         scale_factor = 0.5
 
         # Add invisible scatter trace.
         # This trace is added to help the autoresize logic work.
-        fig.add_trace(
+        '''fig.add_trace(
             go.Scatter(
                 x=[0, img_width * scale_factor],
                 y=[0, img_height * scale_factor],
@@ -566,15 +566,15 @@ def show_id(ric_s,topon,reg,anno_scav,soprin,arch,
             range=[0, img_height * scale_factor],
             # the scaleanchor attribute ensures that the aspect ratio stays constant
             scaleanchor="x"
-        )
+        )'''
 
         # Add image
         fig.add_layout_image(
             dict(
                 x=0,
-                sizex=img_width * scale_factor,
+                #sizex=img_width * scale_factor,
                 y=img_height * scale_factor,
-                sizey=img_height * scale_factor,
+                #sizey=img_height * scale_factor,
                 xref="x",
                 yref="y",
                 opacity=1.0,
@@ -584,11 +584,11 @@ def show_id(ric_s,topon,reg,anno_scav,soprin,arch,
         )
 
         # Configure other layout
-        fig.update_layout(
+        '''fig.update_layout(
             width=img_width * scale_factor,
             height=img_height * scale_factor,
             margin={"l": 0, "r": 0, "t": 0, "b": 0},
-        )
+        )'''
         
         img = []
         img.append(html.Div(children=dcc.Graph(figure=fig),style={'float':'left'}))
