@@ -605,7 +605,8 @@ def show_id(ric_s,topon,reg,anno_scav,soprin,arch,
         )
         
         img = []
-        img.append(html.Div(children=dcc.Graph(figure=fig),style={'float':'left'}))
+        img.append(html.Img(src="assets/DB Images/"+id_a+".jpg", style={'height':'25%', 'width':'25%','float':'left','border': '2px solid #555'}))
+        #img.append(html.Div(children=dcc.Graph(figure=fig),style={'float':'left'}))
         outputs_anag.append(html.Br())
         
         info_anag = []
@@ -643,7 +644,8 @@ def show_id(ric_s,topon,reg,anno_scav,soprin,arch,
                 info_scavi.append(html.Hr(style={'borderColor':'#d21f1b'}))
                 
             img2 = []
-            img2.append(html.Div(children=dcc.Graph(figure=fig),style={'float':'left'}))
+            img2.append(html.Img(src="assets/DB Images/"+id_a+".jpg", style={'height':'25%', 'width':'25%','float':'left','border': '2px solid #555'}))
+            #img2.append(html.Div(children=dcc.Graph(figure=fig),style={'float':'left'}))
             img2.append(html.Div(children=info_scavi,style={'margin-left':'2%','float':'right'}))
             outputs_scavi.append(html.Div(children=img2,style={'display':'flex'}))
             
@@ -669,19 +671,26 @@ def show_id(ric_s,topon,reg,anno_scav,soprin,arch,
                 info_coll.append(html.Hr(style={'borderColor':'#d21f1b'})) 
 
             img3 = []
-            img3.append(html.Div(children=dcc.Graph(figure=fig),style={'float':'left'}))
+            img3.append(html.Img(src="assets/DB Images/"+id_a+".jpg", style={'height':'25%', 'width':'25%','float':'left','border': '2px solid #555'}))
+            #img3.append(html.Div(children=dcc.Graph(figure=fig),style={'float':'left'}))
             img3.append(html.Div(children=info_coll,style={'margin-left':'2%','float':'right'}))
             outputs_coll.append(html.Div(children=img3,style={'display':'flex'}))
             
  
         outputs_biblio.append(html.Br())
         s = biblio['Bibliografia'].str.split('\n')
+        img4 = []
+        info_bib = []
+        img4.append(html.Img(src="assets/DB Images/"+id_a+".jpg", style={'height':'25%', 'width':'25%','float':'left','border': '2px solid #555'}))
         
         for b in s[0]:
             if b == 'Missing Value':
-                outputs_biblio.append(html.P('Non ci sono dati disponibili.'))
+                info_bib.append(html.P('Non ci sono dati disponibili.'))
                 break
-            outputs_biblio.append(dcc.Markdown(b))
+            info_bib.append(dcc.Markdown(b))
+
+        img4.append(html.Div(children=info_bib,style={'margin-left':'2%','float':'right'}))
+        outputs_biblio.append(html.Div(children=img4,style={'display':'flex'}))
 
     if current_state[0]['prop_id'] == 'reperto_anagrafica.value':
         
@@ -1233,7 +1242,8 @@ def show_output2(id_a):
         )
         
         img = []
-        img.append(html.Div(children=dcc.Graph(figure=fig),style={'float':'left'}))
+        img.append(html.Img(src="assets/DB Images/"+id_a+".jpg", style={'height':'20%', 'width':'20%','float':'left','border': '2px solid #555'}))
+        #img.append(html.Div(children=dcc.Graph(figure=fig),style={'float':'left'}))
         outputs_anag.append(html.Br())
         
         info_anag = []
@@ -1266,7 +1276,8 @@ def show_output2(id_a):
             info_scavi.append(html.Hr(style={'borderColor':'#d21f1b'}))
         
         img2 = []
-        img2.append(html.Div(children=dcc.Graph(figure=fig),style={'float':'left'}))
+        img2.append(html.Img(src="assets/DB Images/"+id_a+".jpg", style={'height':'20%', 'width':'20%','float':'left','border': '2px solid #555'}))
+        #img2.append(html.Div(children=dcc.Graph(figure=fig),style={'float':'left'}))
         img2.append(html.Div(children=info_scavi,style={'margin-left':'2%','float':'right'}))
         outputs_scavi.append(html.Div(children=img2,style={'display':'flex'}))
 
@@ -1283,17 +1294,25 @@ def show_output2(id_a):
             info_coll.append(html.Hr(style={'borderColor':'#d21f1b'}))
         
         img3 = []
-        img3.append(html.Div(children=dcc.Graph(figure=fig),style={'float':'left'}))
+        img3.append(html.Img(src="assets/DB Images/"+id_a+".jpg", style={'height':'20%', 'width':'20%','float':'left','border': '2px solid #555'}))
+        #img3.append(html.Div(children=dcc.Graph(figure=fig),style={'float':'left'}))
         img3.append(html.Div(children=info_coll,style={'margin-left':'2%','float':'right'}))
         outputs_coll.append(html.Div(children=img3,style={'display':'flex'}))
 
         outputs_biblio.append(html.Br())
         s = biblio['Bibliografia'].str.split('\n')
+        img4 = []
+        info_bib = []
+        img4.append(html.Img(src="assets/DB Images/"+id_a+".jpg", style={'height':'25%', 'width':'25%','float':'left','border': '2px solid #555'}))
+        
         for b in s[0]:
-            if b=='Missing Value':
-                outputs_biblio.append('Non ci sono dati disponibili.')
+            if b == 'Missing Value':
+                info_bib.append(html.P('Non ci sono dati disponibili.'))
                 break
-            outputs_biblio.append(dcc.Markdown(b))
+            info_bib.append(dcc.Markdown(b))
+
+        img4.append(html.Div(children=info_bib,style={'margin-left':'2%','float':'right'}))
+        outputs_biblio.append(html.Div(children=img4,style={'display':'flex'}))
     
     return outputs_anag,outputs_scavi,outputs_coll,outputs_biblio
     
