@@ -54,7 +54,7 @@ app.layout = html.Div(children = [
         html.Span('Seleziona il campo di ricerca: '),
         dcc.Dropdown(id='ricerca_anagrafica', options=[{'label': i, 'value': i} for i in ricerca_anagrafica]),
         html.Span(id='2',children='ID reperto: ',style={'display':'none'}),
-        dcc.Dropdown(id='id_anagrafica', options=[{'label': i, 'value': i} for i in anagrafica.index],style=dropdown_style),
+        dcc.Dropdown(id='id_anagrafica', options=[{'label': i, 'value': i} for i in anagrafica.index if i!='Missing Value'],style=dropdown_style),
         html.Span(id='3',children='Reperto: ',style={'display':'none'}),
         dcc.Dropdown(id='reperto_anagrafica', options=[{'label': i, 'value': i} for i in anagrafica.Reperto.unique() if i!='Missing Value'],style=dropdown_style),
         html.Span(id='4',children='Materiale: ',style={'display':'none'}),
