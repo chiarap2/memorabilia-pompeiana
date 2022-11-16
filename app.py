@@ -41,13 +41,14 @@ ricerca_collezione = ['Nazione', 'Città', 'Collezionista', 'Modalità di Acquis
 children_tabs = []
 
 children_tabs.append(dcc.Tab(id='tab1',label='Anagrafica',children=[html.Div(id='output-anagrafica'),html.Div(id='output-anagrafica-2')],selected_style=style_button))
-children_tabs.append(dcc.Tab(id='tab2',label='Scavi',children=[html.Div(id='output-scavi'),html.Div(id='output-scavi-2')],selected_style=style_button))
+children_tabs.append(dcc.Tab(id='tab2',label='Scavo',children=[html.Div(id='output-scavi'),html.Div(id='output-scavi-2')],selected_style=style_button))
 children_tabs.append(dcc.Tab(id='tab3',label='Collezionisti',children=[html.Div(id='output-collezionisti'),html.Div(id='output-collezionisti-2')],selected_style=style_button))
 children_tabs.append(dcc.Tab(id='tab4',label='Bibliografia',children=[html.Div(id='output-biblio'),html.Div(id='output-biblio-2')],selected_style=style_button))
 
-app.layout = html.Div([
+app.layout = html.Div(children = [
     html.H1(children=[html.I('Memorabilia Pompeiana')], style={'font-family':'Futura','color':'#d21f1b'}),
-    html.H3(children=['Antichità da Pompei nelle collezioni europee (1748-1830)'],style={'font-family':'Futura','color':'#d21f1b'}),
+    html.H3(children=['Antichità da Pompei nelle collezioni europee (1748-1830)'],style={'font-family':'Futura','color':'#d21f1b','margin-top':'-1.5%'}),
+    html.P(children=['Autore: SILVIO LA PAGLIA - Web Designer: CHIARA PUGLIESE - Photo Editor: PASQUALE BUCCIERO'],style={'font-family':'Futura'}),
     html.Div([
         html.H5('Ricerca per anagrafica:'),
         html.Span('Seleziona il campo di ricerca: '),
@@ -108,12 +109,6 @@ app.layout = html.Div([
         html.H5('Abbreviazioni:'),
         dcc.Dropdown(id='scegli_abbr', options=[{'label': i, 'value': i} for i in ['Abbreviazioni Archivi','Abbreviazioni Bibliografiche','Abbreviazioni Tipologie']]),
         html.Br(),
-        dcc.Dropdown(id='archivi', options=[{'label': i, 'value': i} for i in abbr_archivi.Abbreviazione.unique()],style=dropdown_style),
-        dcc.Dropdown(id='biblio', options=[{'label': i, 'value': i} for i in abbr_biblio.Abbreviazione.unique()],style=dropdown_style),
-        dcc.Dropdown(id='tipologie', options=[{'label': i, 'value': i} for i in abbr_tipologie.Abbreviazione.unique()],style=dropdown_style),
-        html.Span(id='abbr_archivi',style={'display':'none'}),
-        html.Span(id='abbr_biblio',style={'display':'none'}),
-        html.Span(id='abbr_tipologie',style={'display':'none'}),
         
     ],style={'width':'30%','float':'left'}),
     html.Div(children=[
@@ -129,8 +124,21 @@ app.layout = html.Div([
         #html.Div(id='output-scavi-2'),
         #html.Div(id='output-collezionisti-2'),
         #html.Div(id='output-biblio-2')
-    ],style={'width':'65%','float':'right'})
-    
+    ],style={'width':'65%','float':'right'}),
+    html.Div(children=[
+        html.Div(children=[
+            dcc.Dropdown(id='archivi', options=[{'label': i, 'value': i} for i in abbr_archivi.Abbreviazione.unique()],style=dropdown_style),
+            dcc.Dropdown(id='biblio', options=[{'label': i, 'value': i} for i in abbr_biblio.Abbreviazione.unique()],style=dropdown_style),
+            dcc.Dropdown(id='tipologie', options=[{'label': i, 'value': i} for i in abbr_tipologie.Abbreviazione.unique()],style=dropdown_style),
+        ],style={'float':'right','width':'30%'}),
+        html.Div(children=[
+            html.Span(id='abbr_archivi',style={'display':'none'}),
+            html.Span(id='abbr_biblio',style={'display':'none'}),
+            html.Span(id='abbr_tipologie',style={'display':'none'}),
+        ],style={'float':'left','width':'60%'}),
+        
+    ],style={'display':'flex','width':'100%'}),
+    html.Div(children=[html.P(children=['*Dati aggiornati al 31/12/2022'],style={'background-color':'#cdcdcd','margin':'2%','padding':'0.5%'})])
 ]) 
 
 @app.callback(
@@ -174,30 +182,34 @@ def show_abbr2(arch,bib,tip):
     current_state = dash.callback_context.triggered
     results = []
     display_no = {'display':'none'}
-    display_yes = {'display':'block'}
+    display_yes = {'display':'block','margin':'1%'}
     
     if arch is None and bib is None and tip is None:
         return results, results, results, display_no, display_no, display_no
     
     id_abbr = current_state[0]['value']
-    
-    abbr_archivi.set_index('Abbreviazione',inplace=True)
-    abbr_biblio.set_index('Abbreviazione',inplace=True)
-    abbr_tipologie.set_index('Abbreviazione',inplace=True)
+
+    archivi = abbr_archivi[['Abbreviazione','Archivio']]
+    biblio = abbr_biblio[['Abbreviazione','Bibliografia']]
+    tipologie = abbr_tipologie[['Abbreviazione','Tipo']]
+
+    archivi.set_index('Abbreviazione',inplace=True)
+    biblio.set_index('Abbreviazione',inplace=True)
+    tipologie.set_index('Abbreviazione',inplace=True)
     
     if current_state[0]['prop_id'] == 'archivi.value':
         
-        val = abbr_archivi.loc[id_abbr]
+        val = archivi['Archivio'].loc[id_abbr]
         return val, results, results, display_yes, display_no, display_no
     
     if current_state[0]['prop_id'] == 'biblio.value':
         
-        val = abbr_biblio.loc[id_abbr]
+        val = biblio['Bibliografia'].loc[id_abbr]
         return val, results, results, display_yes, display_no, display_no    
     
     if current_state[0]['prop_id'] == 'tipologie.value':
         
-        val = abbr_tipologie.loc[id_abbr]
+        val = tipologie['Tipo'].loc[id_abbr]
         return val, results, results, display_yes, display_no, display_no    
     
 @app.callback(
@@ -584,11 +596,12 @@ def show_id(ric_s,topon,reg,anno_scav,soprin,arch,
         )
 
         # Configure other layout
-        '''fig.update_layout(
+        fig.update_layout(
             width=img_width * scale_factor,
             height=img_height * scale_factor,
-            margin={"l": 0, "r": 0, "t": 0, "b": 0},
-        )'''
+            margin={"l": 1, "r": 1, "t": 1, "b": 1},
+            paper_bgcolor="Black"
+        )
         
         img = []
         img.append(html.Div(children=dcc.Graph(figure=fig),style={'float':'left'}))
@@ -604,9 +617,11 @@ def show_id(ric_s,topon,reg,anno_scav,soprin,arch,
                 info_anag.append(html.Span(str(row[c])))
                 info_anag.append(html.Br())
         
-        img.append(html.Div(children=info_anag,style={'float':'right'}))
+        img.append(html.Div(children=info_anag,style={'margin-left':'2%','float':'right'}))
         outputs_anag.append(html.Div(children=img,style={'display':'flex'}))
         outputs_anag.append(html.Hr(style={'borderColor':'#d21f1b'}))
+
+        info_scavi = []
 
         if len(scavi)!=0:
             
@@ -618,52 +633,22 @@ def show_id(ric_s,topon,reg,anno_scav,soprin,arch,
                 for c in scavi_c:
                     if row[c]=='Missing Value' or row[c]=='...' or c == 'ID SCAVO':
                         continue
-                    
-                    if index == 'DE 005' and c == 'Insula':
-                        outputs_scavi.append(html.Span(str(c)+ ': ',style={'font-weight': 'bold'}))
-                        insula = row[c]
-                        outputs_scavi.append(html.Span(''+insula[0:insula.index('\n')]))
-                        outputs_scavi.append(html.Br())
-                        outputs_scavi.append(html.Span(str(c)+ ': ',style={'font-weight': 'bold'}))
-                        outputs_scavi.append(html.Span(''+insula[insula.index('\n'):len(insula)]))
-                    
-                    elif index == 'DE 005' and c == 'Civico':
-                        outputs_scavi.append(html.Span(str(c)+ ': ',style={'font-weight': 'bold'}))
-                        civico = row[c]
-                        outputs_scavi.append(html.Span(''+civico[0:civico.index('\n')]))
-                        outputs_scavi.append(html.Br())
-                        outputs_scavi.append(html.Span(str(c)+ ': ',style={'font-weight': 'bold'}))
-                        outputs_scavi.append(html.Span(''+civico[civico.index('\n'):len(civico)]))
+        
+                    info_scavi.append(html.Span(str(c)+ ': ',style={'font-weight': 'bold'}))
+                    info_scavi.append(html.Span(''+row[c]))
                         
-                    elif index == 'GB 010' and c == 'Mese':
-                        outputs_scavi.append(html.Span(str(c)+ ': ',style={'font-weight': 'bold'}))
-                        insula = row[c]
-                        outputs_scavi.append(html.Span(''+insula[0:insula.index('\n')]))
-                        outputs_scavi.append(html.Br())
-                        outputs_scavi.append(html.Span(str(c)+ ': ',style={'font-weight': 'bold'}))
-                        outputs_scavi.append(html.Span(''+insula[insula.index('\n'):len(insula)]))
-                    
-                    elif index == 'GB 010' and c == 'Giorno':
-                        outputs_scavi.append(html.Span(str(c)+ ': ',style={'font-weight': 'bold'}))
-                        civico = row[c]
-                        outputs_scavi.append(html.Span(''+civico[0:civico.index('\n')]))
-                        outputs_scavi.append(html.Br())
-                        outputs_scavi.append(html.Span(str(c)+ ': ',style={'font-weight': 'bold'}))
-                        outputs_scavi.append(html.Span(''+civico[civico.index('\n'):len(civico)]))
-                    
-                    else:
-                        
-                        outputs_scavi.append(html.Span(str(c)+ ': ',style={'font-weight': 'bold'}))
-                        outputs_scavi.append(html.Span(''+row[c]))
-                        
-                    outputs_scavi.append(html.Br())
+                    info_scavi.append(html.Br())
                 
-                img = []
-                img.append(html.Div(children=dcc.Graph(figure=fig),style={'float':'left'}))
-                img.append(html.Div(children=outputs_scavi,style={'float':'right'}))
-                #outputs_anag.append(html.Div(children=img,style={'display':'flex'}))
-                outputs_scavi.append(html.Hr(style={'borderColor':'#d21f1b'}))
+                info_scavi.append(html.Hr(style={'borderColor':'#d21f1b'}))
+                
+            img2 = []
+            img2.append(html.Div(children=dcc.Graph(figure=fig),style={'float':'left'}))
+            img2.append(html.Div(children=info_scavi,style={'margin-left':'2%','float':'right'}))
+            outputs_scavi.append(html.Div(children=img2,style={'display':'flex'}))
             
+            
+        info_coll = []
+
         if len(collezionisti)!=0:
 
             outputs_coll.append(html.Br())
@@ -676,16 +661,27 @@ def show_id(ric_s,topon,reg,anno_scav,soprin,arch,
                 for c in coll_c:
                     if row[c]=='Missing Value' or row[c]=='...' or c == 'ID COLLEZIONISTA':
                         continue
-                    outputs_coll.append(html.Span(str(c)+ ': ',style={'font-weight': 'bold'}))
-                    outputs_coll.append(html.Span(''+row[c] + ' '))
-                    outputs_coll.append(html.Br())
-                outputs_coll.append(html.Hr(style={'borderColor':'#d21f1b'}))
+                    info_coll.append(html.Span(str(c)+ ': ',style={'font-weight': 'bold'}))
+                    info_coll.append(html.Span(''+row[c] + ' '))
+                    info_coll.append(html.Br())
+                    
+                info_coll.append(html.Hr(style={'borderColor':'#d21f1b'})) 
+
+            img3 = []
+            img3.append(html.Div(children=dcc.Graph(figure=fig),style={'float':'left'}))
+            img3.append(html.Div(children=info_coll,style={'margin-left':'2%','float':'right'}))
+            outputs_coll.append(html.Div(children=img3,style={'display':'flex'}))
+            
  
         outputs_biblio.append(html.Br())
         s = biblio['Bibliografia'].str.split('\n')
+        
         for b in s[0]:
+            if b == 'Missing Value':
+                outputs_biblio.append(html.P('Non ci sono dati disponibili.'))
+                break
             outputs_biblio.append(dcc.Markdown(b))
-                
+
     if current_state[0]['prop_id'] == 'reperto_anagrafica.value':
         
         rep_a = current_state[0]['value']
@@ -1231,7 +1227,8 @@ def show_output2(id_a):
         fig.update_layout(
             width=img_width * scale_factor,
             height=img_height * scale_factor,
-            margin={"l": 0, "r": 0, "t": 0, "b": 0},
+            margin={"l": 1, "r": 1, "t": 1, "b": 1},
+            paper_bgcolor="Black"
         )
         
         img = []
@@ -1239,7 +1236,7 @@ def show_output2(id_a):
         outputs_anag.append(html.Br())
         
         info_anag = []
-        
+
         for index, row in info.iterrows():
             for c in info_c:
                 if row[c]=='Missing Value' or row[c]=='...':
@@ -1248,38 +1245,53 @@ def show_output2(id_a):
                 info_anag.append(html.Span(str(row[c])))
                 info_anag.append(html.Br())
             
-        img.append(html.Div(children=info_anag,style={'float':'right'}))
+        img.append(html.Div(children=info_anag,style={'margin-left':'2%','float':'right'}))
         outputs_anag.append(html.Div(children=img,style={'display':'flex'}))
         outputs_anag.append(html.Hr(style={'borderColor':'#d21f1b'}))
 
         scavi_c = scavi.columns
         
-
+        info_scavi = []
+        outputs_scavi.append(html.Br())
         for index, row in scavi.iterrows():   
             
             for c in scavi_c:
                 
                 if row[c]=='Missing Value' or row[c]=='...' or c == 'ID SCAVO':
                     continue
-                outputs_scavi.append(html.Span(c+ ': ',style={'font-weight': 'bold'}))
-                outputs_scavi.append(html.Span(str(row[c])))
-                outputs_scavi.append(html.Br())
-            outputs_scavi.append(html.Hr(style={'borderColor':'#d21f1b'}))
+                info_scavi.append(html.Span(c+ ': ',style={'font-weight': 'bold'}))
+                info_scavi.append(html.Span(str(row[c])))
+                info_scavi.append(html.Br())
+            info_scavi.append(html.Hr(style={'borderColor':'#d21f1b'}))
         
+        img2 = []
+        img2.append(html.Div(children=dcc.Graph(figure=fig),style={'float':'left'}))
+        img2.append(html.Div(children=info_scavi,style={'margin-left':'2%','float':'right'}))
+        outputs_scavi.append(html.Div(children=img2,style={'display':'flex'}))
+
         coll_c = collezionisti.columns
-        
+        info_coll = []
+        outputs_coll.append(html.Br())
         for index, row in collezionisti.iterrows():
             for c in coll_c:
                 if row[c]=='Missing Value' or row[c]=='...' or c == 'ID COLLEZIONISTA':
                     continue
-                outputs_coll.append(html.Span(c+ ': ',style={'font-weight': 'bold'}))
-                outputs_coll.append(html.Span(str(row[c]) + ' '))
-                outputs_coll.append(html.Br())
-            outputs_coll.append(html.Hr(style={'borderColor':'#d21f1b'}))
-            
+                info_coll.append(html.Span(c+ ': ',style={'font-weight': 'bold'}))
+                info_coll.append(html.Span(str(row[c]) + ' '))
+                info_coll.append(html.Br())
+            info_coll.append(html.Hr(style={'borderColor':'#d21f1b'}))
+        
+        img3 = []
+        img3.append(html.Div(children=dcc.Graph(figure=fig),style={'float':'left'}))
+        img3.append(html.Div(children=info_coll,style={'margin-left':'2%','float':'right'}))
+        outputs_coll.append(html.Div(children=img3,style={'display':'flex'}))
+
         outputs_biblio.append(html.Br())
         s = biblio['Bibliografia'].str.split('\n')
         for b in s[0]:
+            if b=='Missing Value':
+                outputs_biblio.append('Non ci sono dati disponibili.')
+                break
             outputs_biblio.append(dcc.Markdown(b))
     
     return outputs_anag,outputs_scavi,outputs_coll,outputs_biblio
@@ -1287,6 +1299,3 @@ def show_output2(id_a):
 
 if __name__ == '__main__':
     app.run_server()
-
-
-
