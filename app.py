@@ -607,7 +607,7 @@ def show_id(ric_s,topon,reg,anno_scav,soprin,arch,
         img.append(html.Div(children=info_anag,style={'float':'right'}))
         outputs_anag.append(html.Div(children=img,style={'display':'flex'}))
         outputs_anag.append(html.Hr(style={'borderColor':'#d21f1b'}))
-        
+
         if len(scavi)!=0:
             
             scavi_c = scavi.columns
@@ -657,7 +657,11 @@ def show_id(ric_s,topon,reg,anno_scav,soprin,arch,
                         outputs_scavi.append(html.Span(''+row[c]))
                         
                     outputs_scavi.append(html.Br())
-                    
+                
+                img = []
+                img.append(html.Div(children=dcc.Graph(figure=fig),style={'float':'left'}))
+                img.append(html.Div(children=outputs_scavi,style={'float':'right'}))
+                #outputs_anag.append(html.Div(children=img,style={'display':'flex'}))
                 outputs_scavi.append(html.Hr(style={'borderColor':'#d21f1b'}))
             
         if len(collezionisti)!=0:
