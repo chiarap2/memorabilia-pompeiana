@@ -540,7 +540,7 @@ def show_id(ric_s,topon,reg,anno_scav,soprin,arch,
         fig = go.Figure()
 
         # Constants
-        img_width = 600
+        img_width = 300
         img_height = 600
         scale_factor = 0.5
 
