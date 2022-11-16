@@ -540,8 +540,8 @@ def show_id(ric_s,topon,reg,anno_scav,soprin,arch,
         fig = go.Figure()
 
         # Constants
-        img_width = 800
-        img_height = 800
+        img_width = 600
+        img_height = 600
         scale_factor = 0.5
 
         # Add invisible scatter trace.
@@ -1180,8 +1180,8 @@ def show_output2(id_a):
         fig = go.Figure()
 
         # Constants
-        img_width = 800
-        img_height = 800
+        img_width = 600
+        img_height = 600
         scale_factor = 0.5
 
         # Add invisible scatter trace.
